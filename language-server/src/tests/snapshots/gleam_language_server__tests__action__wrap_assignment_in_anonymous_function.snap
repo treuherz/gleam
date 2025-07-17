@@ -4,20 +4,20 @@ expression: "pub fn main() {\n    let op = op_factory(1, 2, 3)\n}\n\nfn op_facto
 ---
 ----- BEFORE ACTION
 pub fn main() {
-    let op = op_factory(1, 2, 3)
-             ↑                  
+  let op = op_factory(1, 2, 3)
+           ↑                  
 }
 
 fn op_factory(a: Int, b: Int, c: Int) -> fn(Int) -> Int {
-    todo
+  todo
 }
 
 
 ----- AFTER ACTION
 pub fn main() {
-    let op = fn(int) { op_factory(1, 2, 3)(int) }
+  let op = fn(int) { op_factory(1, 2, 3)(int) }
 }
 
 fn op_factory(a: Int, b: Int, c: Int) -> fn(Int) -> Int {
-    todo
+  todo
 }

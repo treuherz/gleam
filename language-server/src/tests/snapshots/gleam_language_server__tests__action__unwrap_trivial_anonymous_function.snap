@@ -6,12 +6,12 @@ expression: "import gleam/list\n\npub fn main() {\n    list.map([1, 2, 3], fn(in
 import gleam/list
 
 pub fn main() {
-    list.map([1, 2, 3], fn(int) { op(int) })
-                        ↑                   
+  list.map([1, 2, 3], fn(int) { op(int) })
+                      ↑                   
 }
 
 fn op(i: Int) -> Int {
-    todo
+  todo
 }
 
 
@@ -19,9 +19,9 @@ fn op(i: Int) -> Int {
 import gleam/list
 
 pub fn main() {
-    list.map([1, 2, 3], op)
+  list.map([1, 2, 3], op)
 }
 
 fn op(i: Int) -> Int {
-    todo
+  todo
 }
