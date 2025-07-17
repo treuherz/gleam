@@ -140,7 +140,7 @@ const EXTRACT_FUNCTION: &str = "Extract function";
 const MERGE_CASE_BRANCHES: &str = "Merge case branches";
 const ADD_MISSING_TYPE_PARAMETER: &str = "Add missing type parameter";
 const WRAP_IN_ANONYMOUS_FUNCTION: &str = "Wrap in anonymous function";
-const UNWRAP_ANONYMOUS_FUNCTION: &str = "Unwrap anonymous function";
+const UNWRAP_ANONYMOUS_FUNCTION: &str = "Remove anonymous function wrapper";
 
 macro_rules! assert_code_action {
     ($title:expr, $code:literal, $range:expr $(,)?) => {
