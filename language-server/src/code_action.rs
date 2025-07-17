@@ -11040,6 +11040,11 @@ impl<'a> WrapInAnonymousFunction<'a> {
 
 impl<'ast> ast::visit::Visit<'ast> for WrapInAnonymousFunction<'ast> {
     fn visit_typed_call_arg(&mut self, arg: &'ast TypedCallArg) {
+        let function_range = src_span_to_lsp_range(arg.location, self.line_numbers);
+        if !overlaps(self.params.range, function_range) {
+            return;
+        }
+
         if let Type::Fn { ref arguments, .. } = *arg.value.type_() {
             let variables_names = VariablesNames::from_expression(&arg.value);
 
@@ -11052,6 +11057,11 @@ impl<'ast> ast::visit::Visit<'ast> for WrapInAnonymousFunction<'ast> {
     }
 
     fn visit_typed_assignment(&mut self, assignment: &'ast TypedAssignment) {
+        let function_range = src_span_to_lsp_range(assignment.location, self.line_numbers);
+        if !overlaps(self.params.range, function_range) {
+            return;
+        }
+
         if assignment.kind != AssignmentKind::Let {
             return;
         }
@@ -11147,6 +11157,11 @@ impl<'ast> ast::visit::Visit<'ast> for UnwrapAnonymousFunction<'ast> {
         body: &'ast Vec1<TypedStatement>,
         _return_annotation: &'ast Option<ast::TypeAst>,
     ) {
+        let function_range = src_span_to_lsp_range(*location, self.line_numbers);
+        if !overlaps(self.params.range, function_range) {
+            return;
+        }
+
         match kind {
             FunctionLiteralKind::Anonymous { .. } => (),
             _ => return,
