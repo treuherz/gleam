@@ -36,10 +36,11 @@ impl ModuleExtra {
             || self.module_comments.binary_search_by(cmp).is_ok()
     }
 
-    pub(crate) fn has_comment_between(&self, start: u32, end: u32) -> bool {
+    pub fn has_comment_between(&self, start: u32, end: u32) -> bool {
         self.first_comment_between(start, end).is_some()
     }
 
+    // TODO: this won't necessarily find the first comment, just any comment
     pub fn first_comment_between(&self, start: u32, end: u32) -> Option<SrcSpan> {
         self.comments
             .binary_search_by(|comment| {
