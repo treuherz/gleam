@@ -43,7 +43,9 @@ impl ModuleExtra {
     /// Returns the first comment overlapping the given source locations (inclusive)
     /// Note that the returned span covers the text of the comment, not the `//`
     pub fn first_comment_between(&self, start: u32, end: u32) -> Option<SrcSpan> {
-        let inner = |comments: &[SrcSpan], start, end| {
+        // Helper function to find a comment that is between the given start
+        // and end. Not guaranteed to find the first comment.
+        let find_comment_between = |comments: &[SrcSpan], start, end| -> Option<usize> {
             if comments.is_empty() {
                 return None;
             }
@@ -61,13 +63,24 @@ impl ModuleExtra {
                 .ok()
         };
 
-        let mut best = None;
+        // To find the first comment in the given span, we first see if we can
+        // find any comment at all in the span by binary-searching over the list
+        // of comments in the module. If we do, we need to see if any other
+        // comment appears earlier, so we do the same search using the sub-list
+        // of comments before the one we found.
+        //
+        // We repeat this, narrowing our search list each time, until we can't
+        // find any comment earlier than our best.
+        let mut first_index_so_far = None;
         let mut search_list = &self.comments[..];
-        while let Some(index) = inner(search_list, start, end) {
-            best = self.comments.get(index);
+        while let Some(index) = find_comment_between(search_list, start, end) {
+            first_index_so_far = Some(index);
             search_list = search_list.get(0..index).unwrap_or(&[]);
         }
-        best.copied()
+
+        first_index_so_far
+            .and_then(|index| self.comments.get(index))
+            .copied()
     }
 }
 
